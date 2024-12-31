@@ -3,3 +3,5 @@ numpy
 nltk
 scikit-learn
 matplotlib
+textblob
+wordcloud
