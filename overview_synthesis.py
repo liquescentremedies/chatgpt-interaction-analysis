@@ -1,5 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import json
+from flask import Flask, jsonify
+
+app = Flask(__name__)
 
 def load_analysis_data():
     try:
@@ -88,6 +92,23 @@ def save_visualizations(combined_df):
     plt.savefig('overview_categories.png')
     plt.close()
 
+@app.route('/api/summary', methods=['GET'])
+def get_summary():
+    try:
+        analysis_data = load_analysis_data()
+        combined_df = combine_insights(analysis_data)
+        summary_report = generate_summary_report(combined_df, analysis_data['patterns'])
+        return jsonify(summary_report)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/visualizations/<filename>', methods=['GET'])
+def get_visualization(filename):
+    try:
+        return app.send_static_file(filename)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 404
+
 if __name__ == "__main__":
     try:
         # Load all analysis results
@@ -115,6 +136,9 @@ if __name__ == "__main__":
         for theme in summary_report['Top Themes'][:5]:
             print(f"{theme['word']}: {theme['frequency']} occurrences")
             
+        # Run Flask app
+        app.run(debug=True, host='0.0.0.0', port=5000)
+        
     except FileNotFoundError as e:
         print(f"Error: {str(e)}")
         print("Please ensure all analysis scripts have been run in the correct order:")
