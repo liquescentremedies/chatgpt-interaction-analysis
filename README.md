@@ -131,6 +131,26 @@ The analysis generates several output files:
 - `word_cloud.png`: Word cloud of common themes
 - `overview_*.png`: Overview visualizations
 
+## Setting Up and Running the Frontend
+
+1. **Navigate to the frontend directory**:
+   ```bash
+   cd frontend
+   ```
+
+2. **Install frontend dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Start the React application**:
+   ```bash
+   npm start
+   ```
+
+4. **Access the frontend**:
+   Open your browser and go to `http://localhost:3000` to view the analysis results in a user-friendly interface.
+
 ## Error Handling
 
 Each script includes error handling for common issues:

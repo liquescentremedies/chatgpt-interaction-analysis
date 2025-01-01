@@ -1,5 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import json
+from flask import Flask, jsonify
+
+app = Flask(__name__)
 
 def load_analysis_data():
     try:
@@ -88,6 +92,87 @@ def save_visualizations(combined_df):
     plt.savefig('overview_categories.png')
     plt.close()
 
+@app.route('/api/summary', methods=['GET'])
+def get_summary():
+    try:
+        analysis_data = load_analysis_data()
+        combined_df = combine_insights(analysis_data)
+        summary_report = generate_summary_report(combined_df, analysis_data['patterns'])
+        return jsonify(summary_report)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/visualizations/<filename>', methods=['GET'])
+def get_visualization(filename):
+    try:
+        return app.send_static_file(filename)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 404
+
+@app.route('/api/overview', methods=['GET'])
+def get_overview():
+    try:
+        analysis_data = load_analysis_data()
+        combined_df = combine_insights(analysis_data)
+        summary_report = generate_summary_report(combined_df, analysis_data['patterns'])
+        return jsonify(summary_report)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/sentiment-analysis', methods=['GET'])
+def get_sentiment_analysis():
+    try:
+        sentiment_data = pd.read_csv('sentiment_analysis.csv')
+        sentiment_dict = sentiment_data.to_dict(orient='records')
+        return jsonify(sentiment_dict)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/temporal-analysis', methods=['GET'])
+def get_temporal_analysis():
+    try:
+        temporal_data = pd.read_csv('temporal_analysis.csv')
+        temporal_dict = temporal_data.to_dict(orient='records')
+        return jsonify(temporal_dict)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/topic-modeling', methods=['GET'])
+def get_topic_modeling():
+    try:
+        topic_data = pd.read_csv('topic_modeling.csv')
+        topic_dict = topic_data.to_dict(orient='records')
+        return jsonify(topic_dict)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/query-classification', methods=['GET'])
+def get_query_classification():
+    try:
+        query_data = pd.read_csv('query_classification.csv')
+        query_dict = query_data.to_dict(orient='records')
+        return jsonify(query_dict)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/response-time-analysis', methods=['GET'])
+def get_response_time_analysis():
+    try:
+        response_time_data = pd.read_csv('response_time_analysis.csv')
+        response_time_dict = response_time_data.to_dict(orient='records')
+        return jsonify(response_time_dict)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/conversation-patterns', methods=['GET'])
+def get_conversation_patterns():
+    try:
+        patterns_data = pd.read_csv('conversation_patterns.csv')
+        patterns_dict = patterns_data.to_dict(orient='records')
+        return jsonify(patterns_dict)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == "__main__":
     try:
         # Load all analysis results
@@ -115,6 +200,9 @@ if __name__ == "__main__":
         for theme in summary_report['Top Themes'][:5]:
             print(f"{theme['word']}: {theme['frequency']} occurrences")
             
+        # Run Flask app
+        app.run(debug=True, host='0.0.0.0', port=5000)
+        
     except FileNotFoundError as e:
         print(f"Error: {str(e)}")
         print("Please ensure all analysis scripts have been run in the correct order:")
