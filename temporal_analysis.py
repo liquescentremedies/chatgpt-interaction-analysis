@@ -2,11 +2,28 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def analyze_interaction_patterns(timestamps):
+    """
+    Analyze interaction patterns by counting the number of interactions over time.
+
+    Args:
+        timestamps (list): List of timestamps.
+
+    Returns:
+        Series: A pandas Series with interaction counts indexed by time.
+    """
     timestamps = pd.to_datetime(timestamps)
     interaction_counts = timestamps.value_counts().sort_index()
     return interaction_counts
 
 def visualize_interaction_frequency(interaction_counts, title, filename):
+    """
+    Visualize the frequency of interactions over time and save the plot to a file.
+
+    Args:
+        interaction_counts (Series): A pandas Series with interaction counts indexed by time.
+        title (str): The title of the plot.
+        filename (str): The filename to save the plot.
+    """
     plt.figure(figsize=(12, 6))
     interaction_counts.plot(kind='line')
     plt.title(title)
@@ -17,6 +34,15 @@ def visualize_interaction_frequency(interaction_counts, title, filename):
     plt.close()
 
 def identify_engagement_trends(interaction_counts):
+    """
+    Identify engagement trends by calculating a rolling mean of interaction counts.
+
+    Args:
+        interaction_counts (Series): A pandas Series with interaction counts indexed by time.
+
+    Returns:
+        Series: A pandas Series with the rolling mean of interaction counts.
+    """
     rolling_mean = interaction_counts.rolling(window=7).mean()
     return rolling_mean
 

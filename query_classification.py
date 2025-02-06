@@ -5,16 +5,46 @@ from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
 def preprocess_data(queries):
+    """
+    Preprocess the query data using TF-IDF vectorization.
+
+    Args:
+        queries (list): List of query strings.
+
+    Returns:
+        tuple: Transformed query data and the vectorizer.
+    """
     vectorizer = TfidfVectorizer(stop_words='english', min_df=2)
     X = vectorizer.fit_transform(queries)
     return X, vectorizer
 
 def classify_queries_kmeans(X, n_clusters=5):
+    """
+    Classify queries into clusters using KMeans.
+
+    Args:
+        X (sparse matrix): Transformed query data.
+        n_clusters (int): Number of clusters.
+
+    Returns:
+        tuple: KMeans model and cluster assignments.
+    """
     kmeans = KMeans(n_clusters=n_clusters, random_state=42)
     clusters = kmeans.fit_predict(X)
     return kmeans, clusters
 
 def get_cluster_keywords(vectorizer, kmeans, n_words=5):
+    """
+    Get the top keywords for each cluster.
+
+    Args:
+        vectorizer (TfidfVectorizer): Fitted TF-IDF vectorizer.
+        kmeans (KMeans): Fitted KMeans model.
+        n_words (int): Number of top words to extract.
+
+    Returns:
+        list: List of keywords for each cluster.
+    """
     feature_names = vectorizer.get_feature_names_out()
     clusters_keywords = []
     
@@ -26,6 +56,13 @@ def get_cluster_keywords(vectorizer, kmeans, n_words=5):
     return clusters_keywords
 
 def visualize_cluster_distribution(clusters, filename):
+    """
+    Visualize the distribution of query clusters.
+
+    Args:
+        clusters (array): Cluster assignments for each query.
+        filename (str): Filename to save the visualization.
+    """
     plt.figure(figsize=(10, 6))
     plt.hist(clusters, bins=len(np.unique(clusters)), align='left', rwidth=0.8)
     plt.xlabel('Cluster')

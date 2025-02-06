@@ -2,11 +2,29 @@ import json
 import pandas as pd
 
 def upload_and_read_json(file_path):
+    """
+    Upload and read a JSON file.
+
+    Args:
+        file_path (str): The path to the JSON file.
+
+    Returns:
+        dict: The loaded JSON data.
+    """
     with open(file_path, 'r') as file:
         data = json.load(file)
     return data
 
 def extract_essential_data(data):
+    """
+    Extract essential data from the JSON structure.
+
+    Args:
+        data (dict): The JSON data.
+
+    Returns:
+        tuple: Extracted queries, responses, timestamps, and response times.
+    """
     queries = []
     responses = []
     timestamps = []
@@ -30,6 +48,18 @@ def extract_essential_data(data):
     return queries, responses, timestamps, response_times
 
 def organize_data(queries, responses, timestamps, response_times):
+    """
+    Organize the extracted data into a DataFrame.
+
+    Args:
+        queries (list): List of queries.
+        responses (list): List of responses.
+        timestamps (list): List of timestamps.
+        response_times (list): List of response times.
+
+    Returns:
+        DataFrame: Organized data.
+    """
     data_dict = {
         'Query': queries,
         'Response': responses,
