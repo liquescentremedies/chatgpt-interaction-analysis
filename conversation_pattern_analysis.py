@@ -6,6 +6,9 @@ from collections import Counter
 import json
 
 def download_nltk_data():
+    """
+    Download required NLTK data for tokenization and stopwords.
+    """
     try:
         nltk.download('punkt', quiet=True)
         nltk.download('stopwords', quiet=True)
@@ -14,6 +17,15 @@ def download_nltk_data():
         print("Some functionality may be limited.")
 
 def identify_recurring_themes(queries):
+    """
+    Identify recurring themes in the queries by analyzing word frequencies.
+
+    Args:
+        queries (list): List of query strings.
+
+    Returns:
+        Counter: A Counter object with word frequencies.
+    """
     stopwords = set(nltk.corpus.stopwords.words('english'))
     all_words = []
 
@@ -30,6 +42,13 @@ def identify_recurring_themes(queries):
     return word_freq
 
 def generate_word_cloud(word_freq, filename):
+    """
+    Generate a word cloud from word frequencies and save it to a file.
+
+    Args:
+        word_freq (Counter): A Counter object with word frequencies.
+        filename (str): The filename to save the word cloud image.
+    """
     plt.figure(figsize=(10, 5))
     wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_freq)
     plt.imshow(wordcloud, interpolation='bilinear')

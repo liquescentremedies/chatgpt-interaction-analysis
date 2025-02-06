@@ -1,7 +1,14 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import json
 
 def load_analysis_data():
+    """
+    Load analysis data from CSV files.
+
+    Returns:
+        dict: A dictionary containing DataFrames for each analysis result.
+    """
     try:
         data = {
             'extracted': pd.read_csv('extracted_data.csv'),
@@ -17,6 +24,15 @@ def load_analysis_data():
         raise FileNotFoundError(f"Missing analysis file: {str(e)}")
 
 def combine_insights(data):
+    """
+    Combine insights from different analyses into a single DataFrame.
+
+    Args:
+        data (dict): A dictionary containing DataFrames for each analysis result.
+
+    Returns:
+        DataFrame: A combined DataFrame with all insights.
+    """
     combined_df = data['extracted'].copy()
     
     # Add sentiment analysis results
@@ -37,6 +53,16 @@ def combine_insights(data):
     return combined_df
 
 def generate_summary_report(combined_df, word_freq_df):
+    """
+    Generate a summary report from the combined DataFrame and word frequency data.
+
+    Args:
+        combined_df (DataFrame): The combined DataFrame with all insights.
+        word_freq_df (DataFrame): The DataFrame with word frequency data.
+
+    Returns:
+        dict: A dictionary containing the summary report.
+    """
     summary = {
         'Overview': {
             'Total Interactions': combined_df.shape[0],
@@ -58,6 +84,12 @@ def generate_summary_report(combined_df, word_freq_df):
     return summary
 
 def save_visualizations(combined_df):
+    """
+    Save visualizations for the combined DataFrame.
+
+    Args:
+        combined_df (DataFrame): The combined DataFrame with all insights.
+    """
     # Sentiment Distribution
     plt.figure(figsize=(10, 6))
     combined_df['QuerySentiment'].value_counts().plot(kind='bar', color=['green', 'red', 'blue'])

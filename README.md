@@ -1,11 +1,11 @@
 # ChatGPT Interaction Analysis
 
-A comprehensive toolkit for analyzing personal ChatGPT conversations to gain insights into engagement patterns, learning styles, and interaction behaviors.
+A toolkit for analyzing ChatGPT conversations to gain insights into engagement patterns, learning styles, and interaction behaviors.
 
 ## Purpose
 
-This project helps you understand your interaction patterns with ChatGPT by analyzing exported conversation data. It provides insights into:
-- Common themes and topics in your conversations
+Understand your interaction patterns with ChatGPT by analyzing exported conversation data. Gain insights into:
+- Common themes and topics
 - Emotional tone of interactions
 - Response times and engagement patterns
 - Query types and categories

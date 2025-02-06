@@ -3,10 +3,28 @@ from textblob import TextBlob
 import matplotlib.pyplot as plt
 
 def analyze_sentiment(text):
+    """
+    Analyze the sentiment of a given text using TextBlob.
+
+    Args:
+        text (str): The text to analyze.
+
+    Returns:
+        float: The polarity score of the text.
+    """
     blob = TextBlob(text)
     return blob.sentiment.polarity
 
 def categorize_sentiment(polarity):
+    """
+    Categorize the sentiment polarity into Positive, Negative, or Neutral.
+
+    Args:
+        polarity (float): The polarity score of the text.
+
+    Returns:
+        str: The sentiment category.
+    """
     if polarity > 0:
         return 'Positive'
     elif polarity < 0:
@@ -15,6 +33,16 @@ def categorize_sentiment(polarity):
         return 'Neutral'
 
 def perform_sentiment_analysis(queries, responses):
+    """
+    Perform sentiment analysis on queries and responses.
+
+    Args:
+        queries (list): List of query strings.
+        responses (list): List of response strings.
+
+    Returns:
+        DataFrame: A DataFrame with sentiment analysis results.
+    """
     query_sentiments = [categorize_sentiment(analyze_sentiment(query)) for query in queries]
     response_sentiments = [categorize_sentiment(analyze_sentiment(response)) for response in responses]
     
@@ -28,6 +56,13 @@ def perform_sentiment_analysis(queries, responses):
     return sentiment_df
 
 def visualize_sentiment_distribution(sentiments, title):
+    """
+    Visualize the distribution of sentiments and save the plot to a file.
+
+    Args:
+        sentiments (list): List of sentiment categories.
+        title (str): The title of the plot.
+    """
     sentiment_counts = pd.Series(sentiments).value_counts()
     plt.figure(figsize=(10, 6))
     sentiment_counts.plot(kind='bar', color=['green', 'red', 'blue'])

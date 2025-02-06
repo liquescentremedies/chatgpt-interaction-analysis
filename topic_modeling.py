@@ -4,16 +4,46 @@ from sklearn.decomposition import LatentDirichletAllocation
 import matplotlib.pyplot as plt
 
 def apply_nlp_techniques(queries):
+    """
+    Apply NLP techniques to transform the queries into a document-term matrix.
+
+    Args:
+        queries (list): List of query strings.
+
+    Returns:
+        tuple: Document-term matrix and the vectorizer.
+    """
     vectorizer = CountVectorizer(stop_words='english', min_df=2)
     query_matrix = vectorizer.fit_transform(queries)
     return query_matrix, vectorizer
 
 def perform_topic_modeling(query_matrix, n_topics=5):
+    """
+    Perform topic modeling using Latent Dirichlet Allocation (LDA).
+
+    Args:
+        query_matrix (sparse matrix): Document-term matrix.
+        n_topics (int): Number of topics.
+
+    Returns:
+        LatentDirichletAllocation: Fitted LDA model.
+    """
     lda = LatentDirichletAllocation(n_components=n_topics, random_state=42)
     lda.fit(query_matrix)
     return lda
 
 def get_topic_words(model, feature_names, n_top_words):
+    """
+    Get the top words for each topic.
+
+    Args:
+        model (LatentDirichletAllocation): Fitted LDA model.
+        feature_names (array): Array of feature names.
+        n_top_words (int): Number of top words to extract.
+
+    Returns:
+        DataFrame: DataFrame with top words for each topic.
+    """
     topics = []
     for topic_idx, topic in enumerate(model.components_):
         top_words = [feature_names[i] for i in topic.argsort()[:-n_top_words - 1:-1]]
@@ -24,6 +54,17 @@ def get_topic_words(model, feature_names, n_top_words):
     return pd.DataFrame(topics)
 
 def get_document_topics(model, query_matrix, queries):
+    """
+    Get the dominant topic for each query.
+
+    Args:
+        model (LatentDirichletAllocation): Fitted LDA model.
+        query_matrix (sparse matrix): Document-term matrix.
+        queries (list): List of query strings.
+
+    Returns:
+        DataFrame: DataFrame with dominant topic and topic probability for each query.
+    """
     topic_distribution = model.transform(query_matrix)
     dominant_topics = topic_distribution.argmax(axis=1)
     
@@ -34,6 +75,14 @@ def get_document_topics(model, query_matrix, queries):
     })
 
 def visualize_topic_distribution(model, query_matrix, filename):
+    """
+    Visualize the distribution of topics in the queries.
+
+    Args:
+        model (LatentDirichletAllocation): Fitted LDA model.
+        query_matrix (sparse matrix): Document-term matrix.
+        filename (str): Filename to save the visualization.
+    """
     topic_distribution = model.transform(query_matrix)
     topic_counts = topic_distribution.argmax(axis=1)
     
